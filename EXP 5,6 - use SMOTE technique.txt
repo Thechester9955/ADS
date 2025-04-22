@@ -1,0 +1,86 @@
+EXP 5 - use SMOTE technique
+
+import pandas as pd
+import seaborn as sns
+dataset=pd.read_csv("admission.csv")
+
+dataset
+
+X=dataset.iloc[:,1:4]
+
+Y=dataset.iloc[:,0:1]
+
+Y.value_counts()
+
+sns.countplot(x="admit",data=dataset)
+
+from sklearn.model_selection import train_test_split
+X_train,X_test,Y_train,Y_test=train_test_split(X,Y,test_size=0.3,random_state=0)
+
+len(X_train)
+len(Y_test)
+
+from imblearn.over_sampling import RandomOverSampler
+ros=RandomOverSampler()
+X_ros,Y_ros=ros.fit_resample(X_train, Y_train)
+
+len(Y_ros)
+
+Y_ros.value_counts()
+
+from imblearn.under_sampling import RandomUnderSampler
+rus=RandomOverSampler()
+X_rus,Y_rus=rus.fit_resample(X_train, Y_train)
+
+len(Y_rus)
+
+Y_rus.value_counts()
+
+from imblearn.over_sampling import SMOTE
+X_smote, Y_smote=SMOTE (k_neighbors=3).fit_resample(X_train, Y_train)
+Y_smote.value_counts()
+
+
+
+
+
+EXP 6 - Outlier detection using distance based/density based method
+
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import make_blobs
+from sklearn.neighbors import LocalOutlierFactor
+# Generate synthetic data with outliers
+X, _ = make_blobs(n_samples=200, centers=1, cluster_std=0.5,
+random_state=42)
+outliers = np.array([[2, 2]]) # Introduce an outlier
+X = np.append(X, outliers, axis=0)
+# Visualize the data
+plt.figure(figsize=(10, 6))
+plt.scatter(X[:, 0], X[:, 1], color='b', s=20, label='Data points')
+plt.scatter(outliers[:, 0], outliers[:, 1], color='r', s=100,
+label='Outliers')
+plt.title('Original Data')
+plt.xlabel('Feature 1')
+plt.ylabel('Feature 2')
+plt.legend()
+plt.grid(True)
+plt.show()
+
+
+# Density-based outlier detection (Local Outlier Factor)
+lof = LocalOutlierFactor(n_neighbors=20, contamination=0.1) # Adjust contamination based on expected outlier ratio
+lof_scores = -lof.fit_predict(X)
+# Visualize density-based outlier detection
+plt.figure(figsize=(10, 6))
+plt.scatter(X[:, 0], X[:, 1], s=20, color='b', label='Data points')
+plt.scatter(outliers[:, 0], outliers[:, 1], color='r', s=100,
+label='Outliers')
+plt.scatter(X[:, 0], X[:, 1], s=1000 * lof_scores, edgecolors='r',
+facecolors='none', label='Outlier scores')
+plt.title('Density-based Outlier Detection (Local Outlier Factor)')
+plt.xlabel('Feature 1')
+plt.ylabel('Feature 2')
+plt.legend()
+plt.grid(True)
+plt.show()
