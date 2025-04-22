@@ -1,0 +1,66 @@
+EXP 3
+
+import seaborn as sns
+import matplotlib.pyplot as plt
+import pandas as pd
+
+tips = sns.load_dataset("tips")
+tips.head()
+
+sns.histplot(data=tips, x="total_bill", kde=True) #kernel density estimation for smooth curve 
+plt.show()
+
+sns.boxplot(data=tips, x="day", y="total_bill")
+plt.show() 
+
+!pip install gapminder
+
+from gapminder import gapminder
+
+data = gapminder.loc [gapminder["year"] == 2007, :]
+
+sns.scatterplot(data=data, x="gdpPercap", y="lifeExp", size="pop", legend=False, sizes=(20,2000))
+plt.show()
+
+iris=sns.load_dataset("iris")
+iris.head()
+
+sns.pairplot(iris, hue="species")
+plt.show()
+
+
+
+EXP 4
+
+import numpy
+
+actual = numpy.random.binomial (1, 0.9, size = 1000)
+predicted = numpy.random.binomial(1, 0.9, size = 1000)
+
+from sklearn import metrics
+
+from sklearn import metrics
+
+confusion_matrix = metrics.confusion_matrix (actual, predicted)
+
+ cm_display = metrics.ConfusionMatrixDisplay(confusion_matrix=confusion_matrix, display_labels = [0, 1])
+
+import matplotlib.pyplot as plt
+
+cm_display.plot()
+plt.show()
+
+Accuracy = metrics.accuracy_score(actual, predicted) 
+print(Accuracy)
+
+Precision = metrics.precision_score(actual, predicted) 
+print(Precision)
+
+Sensitivity_recall = metrics.recall_score(actual, predicted) 
+print(Sensitivity_recall) I
+
+Specificity = metrics.recall_score(actual, predicted, pos_label=0) 
+print(Specificity)
+
+F1_score = metrics.f1_score(actual, predicted) 
+print(F1_score)
